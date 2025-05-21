@@ -1,5 +1,9 @@
 package com.dinoy.forkcast.screens.listing.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,8 +25,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,24 +49,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.dinoy.forkcast.R
+import com.dinoy.forkcast.components.ErrorScreen
+import com.dinoy.forkcast.components.ForkCastLoader
 import com.dinoy.forkcast.components.bounceEffect
-import com.dinoy.forkcast.components.bounceEffectShape
-import com.dinoy.forkcast.screens.listing.components.ProductCard
-import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
+import com.dinoy.forkcast.models.ForkCastState
+import com.dinoy.forkcast.screens.listing.ui.sections.ListingContent
 import com.dinoy.forkcast.ui.theme.interFontFamily
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun ProductListingScreen() {
+fun ProductListingScreen(viewModel: ProductListingViewModel = hiltViewModel<ProductListingViewModel>()) {
 
     var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = LocalDateTime.of(
+            viewModel.state.selectedDate,
+            LocalTime.NOON
+        ).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    )
+    val state = viewModel.state
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -96,7 +111,7 @@ fun ProductListingScreen() {
                             )
                             Spacer(Modifier.width(16.dp))
                             Text(
-                                text = "12 December 2025",
+                                text = state.selectedDate.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")),
                                 fontFamily = interFontFamily,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 16.sp,
@@ -141,45 +156,36 @@ fun ProductListingScreen() {
 //            }
         }
     ) {
-        LazyVerticalGrid(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
-            columns = GridCells.Fixed(count = 2),
-            contentPadding = PaddingValues(vertical = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        )
-        {
-            item{
-                Spacer(Modifier.height(16.dp))
-            }
 
-            item{
-                Spacer(Modifier.height(16.dp))
-            }
+        AnimatedContent(
+            targetState = state.queryState,
+            modifier = Modifier.padding(it),
+            transitionSpec = {
+                fadeIn() togetherWith fadeOut()
+            }) {
+            when (it) {
+                ForkCastState.Loading -> {
+                    ForkCastLoader()
+                }
 
-            ProductCategory.entries.forEach {
-                item {
-                    ProductCard(
-                        modifier = Modifier.animateItem(),
-                        image = it.getImageResourceId(),
-                        name = it.getNameResourceId(),
-                        weight = (10..20).random().toDouble()
-                    )
-                    {
+                ForkCastState.NetworkError -> {
+                    ErrorScreen()
+                }
 
-                    }
+                ForkCastState.NoResult -> {
+                    ErrorScreen()
+                }
+
+                ForkCastState.ServerError -> {
+                    ErrorScreen()
+                }
+
+                ForkCastState.Success -> {
+                    ListingContent()
                 }
             }
-
-            item{
-                Spacer(Modifier.height(48.dp))
-            }
-
-            item{
-                Spacer(Modifier.height(48.dp))
-            }
         }
+
 
         if (showDatePicker) {
             DatePickerDialog(
@@ -189,9 +195,11 @@ fun ProductListingScreen() {
                 confirmButton = {
                     TextButton(
                         onClick = {
-//                            onValueChange(
-//                                Instant.ofEpochMilli(datePickerState.selectedDateMillis ?: 0,).atZone(ZoneId.systemDefault()).toLocalDate(),
-//                            )
+                            viewModel.setSelectedDate(
+                                Instant.ofEpochMilli(
+                                    datePickerState.selectedDateMillis ?: 0,
+                                ).atZone(ZoneId.systemDefault()).toLocalDate()
+                            )
                             showDatePicker = false
                         },
                     ) {

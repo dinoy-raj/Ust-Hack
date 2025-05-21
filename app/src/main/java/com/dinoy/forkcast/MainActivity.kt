@@ -14,14 +14,16 @@ import com.dinoy.forkcast.navigation.MainNavigation
 import com.dinoy.forkcast.screens.details.ui.ProductDetailsScreen
 import com.dinoy.forkcast.screens.listing.ui.ProductListingScreen
 import com.dinoy.forkcast.ui.theme.ForkCastTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         installSplashScreen()
         setContent {
-            ForkCastTheme {
+            ForkCastTheme(darkTheme = false) {
                 MainNavigation()
             }
         }
