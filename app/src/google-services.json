@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "450909437634",
+    "firebase_url": "https://loginone-7f675.firebaseio.com",
+    "project_id": "loginone-7f675",
+    "storage_bucket": "loginone-7f675.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450909437634:android:f5c72e6b7ecae6bb8fc55b",
+        "android_client_info": {
+          "package_name": "com.dinoy.forkcast"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZSq4kAhusul-o7EEyJpHkJoDqxZgkZRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
