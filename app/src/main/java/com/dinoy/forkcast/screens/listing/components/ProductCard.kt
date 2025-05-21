@@ -1,5 +1,8 @@
 package com.dinoy.forkcast.screens.listing.components
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,89 +33,100 @@ import androidx.compose.ui.unit.sp
 import com.dinoy.forkcast.components.bounceEffectShape
 import com.dinoy.forkcast.ui.theme.interFontFamily
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ProductCard(
     modifier: Modifier,
     image: Int,
     name: Int,
     weight: Double,
+    animatedVisibilityScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope,
     onClick: () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .bounceEffectShape(
-                scaleFactor = .95f,
-                pressedShape = 12.dp,
-                initialShape = 24.dp
-            )
-            {
-                onClick()
-            }
-            .background(color = Color.White)
-    )
-    {
-        Column(
-            modifier = Modifier
+    with(sharedTransitionScope) {
+        Box(
+            modifier = modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.Start
+                .bounceEffectShape(
+                    scaleFactor = .95f,
+                    pressedShape = 12.dp,
+                    initialShape = 24.dp
+                )
+                {
+                    onClick()
+                }
+                .background(color = Color.White)
         )
         {
-            Box(
+            Column(
                 modifier = Modifier
-                    .height(72.dp)
                     .fillMaxWidth()
-                    .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp))
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.Start
             )
             {
-                Image(
-                    painter = painterResource(image),
-                    contentDescription = "image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
                 Box(
                     modifier = Modifier
-                        .height(16.dp)
-                        .width(2.dp)
-                        .background(
-                            color = Color.DarkGray.copy(alpha = .2f),
-                            shape = RoundedCornerShape(10.dp)
-                        )
+                        .height(72.dp)
+                        .fillMaxWidth()
+                        .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp))
                 )
+                {
+                    Image(
+                        painter = painterResource(image),
+                        contentDescription = "image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .sharedElement(
+                                rememberSharedContentState(key = image),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                            .clip(RoundedCornerShape(16.dp))
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(16.dp)
+                            .width(2.dp)
+                            .background(
+                                color = Color.DarkGray.copy(alpha = .2f),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    )
+                    Text(
+                        stringResource(name),
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 13.sp,
+                        fontFamily = interFontFamily,
+                        color = Color.DarkGray.copy(alpha = .6f)
+                    )
+                }
+
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.LightGray.copy(alpha = .4f),
+                )
+
                 Text(
-                    stringResource(name),
-                    fontWeight = FontWeight.Medium,
+                    text = "${weight} kg",
+                    fontWeight = FontWeight.SemiBold,
                     fontSize = 13.sp,
                     fontFamily = interFontFamily,
-                    color = Color.DarkGray.copy(alpha = .6f)
+                    color = Color.DarkGray
                 )
+
             }
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.LightGray.copy(alpha = .4f),
-            )
-
-            Text(
-                text = "${weight} kg",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 13.sp,
-                fontFamily = interFontFamily,
-                color = Color.DarkGray
-            )
-
         }
     }
 }

@@ -12,11 +12,9 @@ import com.dinoy.forkcast.screens.listing.data.models.ListingState
 import com.dinoy.forkcast.screens.listing.data.models.PredictRequest
 import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.screens.listing.data.models.ProductData
-import com.dinoy.forkcast.screens.listing.network.ApiService
 import com.dinoy.forkcast.screens.listing.network.DinoRetroFit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
 import java.time.LocalDate
 import javax.inject.Inject
 

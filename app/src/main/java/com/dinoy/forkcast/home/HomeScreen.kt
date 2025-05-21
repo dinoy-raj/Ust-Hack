@@ -1,6 +1,8 @@
 package com.dinoy.forkcast.home
 
-import android.util.Log
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,8 +24,13 @@ import com.dinoy.forkcast.components.DinoBottomNavigationBar
 import com.dinoy.forkcast.navigation.NavMetaData
 import com.dinoy.forkcast.navigation.NavMetaData.RootRoutes
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigate: (Any) -> Unit,
+    animatedVisibilityScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope
+) {
     val navController: NavHostController = rememberNavController()
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
 
@@ -47,7 +54,15 @@ fun HomeScreen() {
                 .background(color = Color.White),
     ) {
 
-        HomeNavigation(modifier = Modifier.weight(1f), controller = navController)
+        HomeNavigation(
+            modifier = Modifier.weight(1f),
+            controller = navController,
+            animatedVisibilityScope = animatedVisibilityScope,
+            sharedTransitionScope = sharedTransitionScope
+        )
+        {
+            onNavigate(it)
+        }
 
         // slate bottom navigation bar
         DinoBottomNavigationBar(

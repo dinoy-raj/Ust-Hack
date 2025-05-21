@@ -1,6 +1,9 @@
 package com.dinoy.forkcast.screens.listing.ui
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -46,6 +49,7 @@ import com.dinoy.forkcast.components.ErrorScreen
 import com.dinoy.forkcast.components.ForkCastLoader
 import com.dinoy.forkcast.components.bounceEffect
 import com.dinoy.forkcast.models.ForkCastState
+import com.dinoy.forkcast.navigation.InnerRoutes
 import com.dinoy.forkcast.screens.listing.ui.sections.ListingContent
 import com.dinoy.forkcast.ui.theme.interFontFamily
 import java.time.Instant
@@ -55,9 +59,17 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class,
+    ExperimentalSharedTransitionApi::class
+)
 @Composable
-fun ProductListingScreen(viewModel: ProductListingViewModel = hiltViewModel<ProductListingViewModel>()) {
+fun ProductListingScreen(
+    viewModel: ProductListingViewModel = hiltViewModel<ProductListingViewModel>(),
+    animatedVisibilityScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope,
+    onClick: (Any) -> Unit
+) {
 
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
@@ -172,7 +184,19 @@ fun ProductListingScreen(viewModel: ProductListingViewModel = hiltViewModel<Prod
                 }
 
                 ForkCastState.Success -> {
-                    ListingContent(viewModel.productData)
+                    ListingContent(
+                        viewModel.productData,
+                        animatedVisibilityScope,
+                        sharedTransitionScope
+                    )
+                    {
+                        onClick(
+                            InnerRoutes.Details(
+                                product = it.name,
+                                date = viewModel.state.selectedDate.toString()
+                            )
+                        )
+                    }
                 }
             }
         }

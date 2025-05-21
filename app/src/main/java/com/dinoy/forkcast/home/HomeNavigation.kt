@@ -1,5 +1,8 @@
 package com.dinoy.forkcast.home
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -11,10 +14,14 @@ import com.dinoy.forkcast.screens.landing.LandingScreen
 import com.dinoy.forkcast.screens.listing.ui.ProductListingScreen
 import com.dinoy.forkcast.screens.profile.ui.ProfileScreen
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun HomeNavigation(
     modifier: Modifier = Modifier,
     controller: NavHostController,
+    animatedVisibilityScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope,
+    onNavigate: (Any) -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -22,11 +29,17 @@ fun HomeNavigation(
         startDestination = MainRoute.Landing,
     ) {
         composable<MainRoute.Landing> {
-            LandingScreen()
+            LandingScreen(controller)
         }
 
         composable<MainRoute.Listing> {
-            ProductListingScreen()
+            ProductListingScreen(
+                animatedVisibilityScope = animatedVisibilityScope,
+                sharedTransitionScope = sharedTransitionScope
+            )
+            {
+                onNavigate(it)
+            }
         }
 
         composable<MainRoute.Upload> {

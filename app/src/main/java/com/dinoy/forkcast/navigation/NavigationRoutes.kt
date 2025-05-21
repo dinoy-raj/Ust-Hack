@@ -2,7 +2,9 @@ package com.dinoy.forkcast.navigation
 
 import com.dinoy.forkcast.R
 import com.dinoy.forkcast.models.NavTabs
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
 
 object MainRoute {
 
@@ -28,7 +30,7 @@ object InnerRoutes {
     data object FileUpload
 
     @Serializable
-    data object Details
+    data class Details(val product: String, val date: String)
 
 }
 

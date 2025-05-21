@@ -1,5 +1,8 @@
 package com.dinoy.forkcast.screens.listing.ui.sections
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -16,8 +19,14 @@ import com.dinoy.forkcast.screens.listing.components.ProductCard
 import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.screens.listing.data.models.ProductData
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ListingContent(productData: SnapshotStateList<ProductData>) {
+fun ListingContent(
+    productData: SnapshotStateList<ProductData>,
+    animatedVisibilityScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope,
+    onClick: (ProductCategory) -> Unit
+) {
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize(),
@@ -39,10 +48,12 @@ fun ListingContent(productData: SnapshotStateList<ProductData>) {
                 modifier = Modifier.animateItem(),
                 image = it.category.getImageResourceId(),
                 name = it.category.getNameResourceId(),
+                animatedVisibilityScope = animatedVisibilityScope,
+                sharedTransitionScope = sharedTransitionScope,
                 weight = it.quantity
             )
             {
-
+                onClick(it.category)
             }
         }
 
