@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.android.hilt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.android.gms)
 }
 
 android {
@@ -79,6 +80,10 @@ dependencies {
 
     // serialization
     implementation(libs.kotlinx.serialization.json)
+
+    //firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
