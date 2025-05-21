@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -54,7 +56,8 @@ fun ProductDetailsScreen(
     category: ProductCategory,
     date: String,
     animatedVisibilityScope: AnimatedContentScope,
-    sharedTransitionScope: SharedTransitionScope
+    sharedTransitionScope: SharedTransitionScope,
+    onBackPress: () -> Unit
 ) {
 
     val hazeState = remember { HazeState() }
@@ -80,7 +83,10 @@ fun ProductDetailsScreen(
                     },
                     navigationIcon = {
                         Icon(
-                            modifier = Modifier.padding(start = 16.dp),
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .clickable { onBackPress() }
+                                .padding(start = 16.dp),
                             painter = painterResource(R.drawable.ic_arrow_left),
                             contentDescription = "nav icon"
                         )
@@ -90,7 +96,7 @@ fun ProductDetailsScreen(
                         scrolledContainerColor = Color.White.copy(alpha = 0f),
                         navigationIconContentColor = Color.Black,
                         titleContentColor = Color.Black
-                    )
+                    ),
                 )
             },
             contentWindowInsets = WindowInsets(0.dp),

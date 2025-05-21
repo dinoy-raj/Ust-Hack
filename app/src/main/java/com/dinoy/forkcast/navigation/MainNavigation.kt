@@ -41,6 +41,9 @@ fun MainNavigation() {
                     animatedVisibilityScope = this,
                     sharedTransitionScope = this@SharedTransitionLayout,
                 )
+                {
+                    navController.popBackStack()
+                }
             }
         }
     }
