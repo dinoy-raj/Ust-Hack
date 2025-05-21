@@ -32,7 +32,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,6 +64,40 @@ fun GraphContentSection(modifier: Modifier = Modifier) {
 
     Box(modifier = modifier)
     {
+
+        Box(modifier = Modifier.fillMaxSize())
+        {
+            Column(modifier = Modifier.padding(horizontal = 16.dp).fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
+
+                Box(
+                    modifier = Modifier
+                        .height(1.dp)
+                        .fillMaxWidth()
+                        .drawWithCache {
+                            onDrawBehind {
+                                val pathEffect = PathEffect.dashPathEffect(
+                                    floatArrayOf(
+                                        10f,
+                                        10f
+                                    ), 0f
+                                )
+                                drawLine(
+                                    color = Color.DarkGray.copy(alpha = .2f),
+                                    start = Offset(
+                                        0f, 0f
+                                    ),
+                                    end = Offset(
+                                        size.width,
+                                        0f
+                                    ),
+                                    strokeWidth = size.height,
+                                    pathEffect = pathEffect
+                                )
+                            }
+                        })
+                Spacer(modifier = Modifier.fillMaxHeight(.6f))
+            }
+        }
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.Bottom,
@@ -271,9 +309,11 @@ fun DayComponent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 AnimatedVisibility(visible = isSelected, enter = scaleIn(), exit = scaleOut()) {
-                    Box(modifier = Modifier
-                        .size(8.dp)
-                        .background(colorCircle, shape = CircleShape))
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .background(colorCircle, shape = CircleShape)
+                    )
                     {
 
                     }

@@ -64,6 +64,7 @@ fun ProductDetailsScreen() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.White.copy(alpha = 0f),
+                    scrolledContainerColor = Color.White.copy(alpha = 0f),
                     navigationIconContentColor = Color.Black,
                     titleContentColor = Color.Black
                 )
