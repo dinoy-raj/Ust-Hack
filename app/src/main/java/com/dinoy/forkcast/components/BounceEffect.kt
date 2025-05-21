@@ -70,6 +70,7 @@ fun Modifier.bounceEffectShape(
 ): Modifier {
 
     var pointerState by remember { mutableIntStateOf(MotionEvent.ACTION_UP) }
+    val view = LocalView.current
 
     val radius by animateDpAsState(
         label = "scaling content",
@@ -96,6 +97,7 @@ fun Modifier.bounceEffectShape(
                 MotionEvent.ACTION_DOWN -> pointerState = MotionEvent.ACTION_DOWN
 
                 MotionEvent.ACTION_UP -> {
+                    view.performHapticFeedback(HapticFeedbackConstantsCompat.LONG_PRESS)
                     pointerState = MotionEvent.ACTION_UP
                     onClick()
                 }
