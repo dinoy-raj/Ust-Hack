@@ -10,4 +10,6 @@
     <string name="appetizer">Appetizer</string>
     <string name="salad">Salad</string>
     <string name="beverage">Beverage</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>

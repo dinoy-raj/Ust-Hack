@@ -18,19 +18,28 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,10 +49,19 @@ import com.dinoy.forkcast.components.bounceEffectShape
 import com.dinoy.forkcast.screens.listing.components.ProductCard
 import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.ui.theme.interFontFamily
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListingScreen() {
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets(0.dp),
@@ -55,7 +73,7 @@ fun ProductListingScreen() {
                     Box(
                         modifier = Modifier
                             .bounceEffect(scaleFactor = .95f) {
-
+                                showDatePicker = true
                             }
                             .padding(horizontal = 32.dp, vertical = 24.dp)
                             .fillMaxWidth()
@@ -132,6 +150,14 @@ fun ProductListingScreen() {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         )
         {
+            item{
+                Spacer(Modifier.height(16.dp))
+            }
+
+            item{
+                Spacer(Modifier.height(16.dp))
+            }
+
             ProductCategory.entries.forEach {
                 item {
                     ProductCard(
@@ -144,6 +170,41 @@ fun ProductListingScreen() {
 
                     }
                 }
+            }
+
+            item{
+                Spacer(Modifier.height(48.dp))
+            }
+
+            item{
+                Spacer(Modifier.height(48.dp))
+            }
+        }
+
+        if (showDatePicker) {
+            DatePickerDialog(
+                onDismissRequest = {
+                    showDatePicker = false
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+//                            onValueChange(
+//                                Instant.ofEpochMilli(datePickerState.selectedDateMillis ?: 0,).atZone(ZoneId.systemDefault()).toLocalDate(),
+//                            )
+                            showDatePicker = false
+                        },
+                    ) {
+                        androidx.compose.material.Text(stringResource(R.string.ok))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDatePicker = false }) {
+                        androidx.compose.material.Text(stringResource(R.string.cancel))
+                    }
+                },
+            ) {
+                DatePicker(state = datePickerState)
             }
         }
     }
