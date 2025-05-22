@@ -14,6 +14,7 @@ import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.screens.listing.data.models.ProductData
 import com.dinoy.forkcast.screens.listing.network.DinoRetroFit
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -27,6 +28,17 @@ class ProductListingViewModel @Inject constructor() : ViewModel() {
     init {
         productData.clear()
         fetchProductsQuery()
+    }
+
+    fun showSnackBar(message: String) = viewModelScope.launch {
+        state = state.copy(
+            error = message
+        )
+        delay(3000)
+
+        state = state.copy(
+            error = null
+        )
     }
 
 
@@ -97,13 +109,16 @@ class ProductListingViewModel @Inject constructor() : ViewModel() {
             )
 
             state = state.copy(
-                queryState = ForkCastState.Success
+                queryState = ForkCastState.Success,
             )
 
         } catch (e: Exception) {
             state = state.copy(
-                queryState = ForkCastState.ServerError
+                queryState = ForkCastState.ServerError,
             )
+
+            showSnackBar(e.message.orEmpty() + e.localizedMessage.orEmpty())
+
         }
 
     }

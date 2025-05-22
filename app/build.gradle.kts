@@ -16,21 +16,15 @@ android {
         applicationId = "com.dinoy.forkcast"
         minSdk = 31
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.0.2"
-        multiDexEnabled = true
+        versionCode = 5
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            isMinifyEnabled = false
         }
     }
     compileOptions {

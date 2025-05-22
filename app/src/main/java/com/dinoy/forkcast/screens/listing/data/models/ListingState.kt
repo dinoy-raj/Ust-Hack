@@ -5,5 +5,6 @@ import java.time.LocalDate
 
 data class ListingState(
     val queryState: ForkCastState = ForkCastState.Loading,
-    val selectedDate: LocalDate = LocalDate.now()
+    val selectedDate: LocalDate = LocalDate.now(),
+    val error: String? = null
 )

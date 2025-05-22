@@ -2,6 +2,7 @@ package com.dinoy.forkcast.screens.listing.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
@@ -26,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -86,6 +88,13 @@ fun ProductListingScreen(
         contentWindowInsets = WindowInsets(0.dp),
         containerColor = Color(0xFFEEF0F4),
         contentColor = Color(0xFFEEF0F4),
+        snackbarHost = {
+            AnimatedVisibility(visible = state.error != null, enter = fadeIn(), exit = fadeOut()) {
+                Snackbar(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
+                    Text(state.error.orEmpty())
+                }
+            }
+        },
         topBar = {
             TopAppBar(
                 title = {
@@ -99,7 +108,8 @@ fun ProductListingScreen(
                             .background(
                                 color = Color.LightGray.copy(alpha = .3f),
                                 shape = RoundedCornerShape(24.dp)
-                            ).border(
+                            )
+                            .border(
                                 width = 1.dp,
                                 color = Color.LightGray.copy(alpha = .6f),
                                 shape = RoundedCornerShape(24.dp)
