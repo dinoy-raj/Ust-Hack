@@ -34,6 +34,7 @@ class ProductDetailsViewModel @Inject constructor(private val detailsRepository:
 
     fun setInitialArguments(date: String, category: ProductCategory) = viewModelScope.launch {
         state = state.copy(
+            isQueryLoading = true,
             notFetched = false
         )
         try {
@@ -55,13 +56,16 @@ class ProductDetailsViewModel @Inject constructor(private val detailsRepository:
             features.addAll(it)
 
         }
-        state =
-            state.copy(selectedIndex = index)
+        state = state.copy(selectedIndex = index)
     }
 
     fun fetchDetailsQuery() = viewModelScope.launch {
-        state =
-            state.copy(queryState = ForkCastState.Loading, productDetails = null, selectedIndex = 0)
+        state = state.copy(
+            queryState = ForkCastState.Loading,
+            productDetails = null,
+            selectedIndex = 0,
+            isQueryLoading = true,
+        )
         features.clear()
         detailsRepository.getProductDetails(
             PredictDetailsRequest(
@@ -75,7 +79,8 @@ class ProductDetailsViewModel @Inject constructor(private val detailsRepository:
                 is DetailsQueryResult.Success -> {
                     if (response.data == null) {
                         state = state.copy(
-                            queryState = ForkCastState.ServerError
+                            queryState = ForkCastState.ServerError,
+                            isQueryLoading = false
                         )
                     } else {
 
@@ -132,7 +137,8 @@ class ProductDetailsViewModel @Inject constructor(private val detailsRepository:
                         state = state.copy(
                             productDetails = productDetails,
                             average = response.data.weeklyPredictions.sumOf { it.predictions } / 7,
-                            queryState = ForkCastState.Success
+                            queryState = ForkCastState.Success,
+                            isQueryLoading = false
                         )
                     }
                 }

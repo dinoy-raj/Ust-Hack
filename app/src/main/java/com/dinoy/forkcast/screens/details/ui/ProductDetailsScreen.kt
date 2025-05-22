@@ -26,7 +26,9 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -60,6 +62,7 @@ import com.dinoy.forkcast.R
 import com.dinoy.forkcast.components.CustomisationTile
 import com.dinoy.forkcast.components.TileSection
 import com.dinoy.forkcast.components.TileSeparator
+import com.dinoy.forkcast.models.ForkCastState
 import com.dinoy.forkcast.screens.details.components.AverageCountSection
 import com.dinoy.forkcast.screens.details.components.GraphSection
 import com.dinoy.forkcast.screens.details.components.HeaderRow
@@ -79,7 +82,7 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalHazeMaterialsApi::class,
-    ExperimentalSharedTransitionApi::class
+    ExperimentalSharedTransitionApi::class, ExperimentalMaterial3ExpressiveApi::class
 )
 @Composable
 fun ProductDetailsScreen(
@@ -214,7 +217,13 @@ fun ProductDetailsScreen(
                 }
 
                 item {
-                    GraphSection(viewModel)
+                    Box(contentAlignment = Alignment.Center)
+                    {
+                        GraphSection(viewModel)
+                        if (state.queryState == ForkCastState.Loading) {
+                            LoadingIndicator(color = Color.Black)
+                        }
+                    }
                 }
 
                 item {

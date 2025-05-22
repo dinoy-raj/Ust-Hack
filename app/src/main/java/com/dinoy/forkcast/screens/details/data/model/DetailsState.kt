@@ -11,5 +11,6 @@ data class DetailsState(
     val average: Double = 0.0,
     val notFetched: Boolean = true,
     val productDetails: ProductDetails? = null,
-    val selectedIndex: Int = 0
+    val selectedIndex: Int = 0,
+    val isQueryLoading: Boolean = true
 )
