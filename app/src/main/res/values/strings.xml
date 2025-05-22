@@ -14,4 +14,11 @@
     <string name="cancel">Cancel</string>
     <string name="version">version : %1$s</string>
     <string name="forkcast">ForkCast</string>
+    <string name="sunny_day">Sunny Day</string>
+    <string name="rainy_day">Rainy Day</string>
+    <string name="humidity">Humidity</string>
+    <string name="temperature">Temperature</string>
+    <string name="weekend">Weekend</string>
+    <string name="holiday">Holiday</string>
+    <string name="weekday">WeekDay</string>
 </resources>

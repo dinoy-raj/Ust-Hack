@@ -33,7 +33,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.dinoy.forkcast.R
+import com.dinoy.forkcast.models.ForkCastState
 import com.dinoy.forkcast.screens.details.components.AverageCountSection
 import com.dinoy.forkcast.screens.details.components.GraphSection
 import com.dinoy.forkcast.screens.details.components.HeaderRow
@@ -51,6 +53,7 @@ import java.time.LocalDate
 )
 @Composable
 fun ProductDetailsScreen(
+    viewModel: ProductDetailsViewModel = hiltViewModel<ProductDetailsViewModel>(),
     category: ProductCategory,
     date: String,
     animatedVisibilityScope: AnimatedContentScope,
@@ -59,9 +62,12 @@ fun ProductDetailsScreen(
 ) {
 
     val hazeState = remember { HazeState() }
+    val state = viewModel.state
 
     LaunchedEffect(category) {
-
+        if (state.notFetched) {
+            viewModel.setInitialArguments(date, category)
+        }
     }
 
     with(sharedTransitionScope) {
@@ -147,7 +153,9 @@ fun ProductDetailsScreen(
                         currentDate = LocalDate.now(),
                         onClickNext = {},
                         onClickPrevious = {},
-                        onCalenderClick = {}
+                        onCalenderClick = {
+
+                        }
                     )
                 }
 

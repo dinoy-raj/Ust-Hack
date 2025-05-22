@@ -37,9 +37,10 @@ fun MainNavigation() {
                 val category = navBackStack.toRoute<InnerRoutes.Details>().product
                 val date = navBackStack.toRoute<InnerRoutes.Details>().date
                 ProductDetailsScreen(
-                    ProductCategory.valueOf(category), date,
+                    category = ProductCategory.valueOf(category),
                     animatedVisibilityScope = this,
                     sharedTransitionScope = this@SharedTransitionLayout,
+                    date = date,
                 )
                 {
                     navController.popBackStack()

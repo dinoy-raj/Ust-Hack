@@ -9,6 +9,6 @@ data class ProductDetailsData(
     val is_sunny: Int,
     val is_weekend: Int,
     val model_insights: ModelInsights,
-    val predictions: Predictions,
+    val predictions: Double,
     val temperature: Double
 )

@@ -8,11 +8,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dinoy.forkcast.models.ForkCastState
+import com.dinoy.forkcast.network.DinoRetroFit
 import com.dinoy.forkcast.screens.listing.data.models.ListingState
 import com.dinoy.forkcast.screens.listing.data.models.PredictRequest
 import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.screens.listing.data.models.ProductData
-import com.dinoy.forkcast.screens.listing.network.DinoRetroFit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -58,7 +58,7 @@ class ProductListingViewModel @Inject constructor() : ViewModel() {
         productData.clear()
 
         try {
-            val response = DinoRetroFit.create().getProductData(
+            val response = DinoRetroFit.create().getProductListingDetails(
                 PredictRequest(
                     date = state.selectedDate.toString(),
                     latitude = 8.5686,
@@ -69,56 +69,50 @@ class ProductListingViewModel @Inject constructor() : ViewModel() {
             productData.add(
                 ProductData(
                     category = ProductCategory.Soup,
-                    quantity = response.predictions.Soup_Waste_kg
+                    quantity = response.Soup_Waste_kg
                 )
             )
 
             productData.add(
                 ProductData(
                     category = ProductCategory.Salad,
-                    quantity = response.predictions.Salad_Waste_kg
+                    quantity = response.Salad_Waste_kg
                 )
             )
 
             productData.add(
                 ProductData(
                     category = ProductCategory.Dessert,
-                    quantity = response.predictions.Dessert_Waste_kg
+                    quantity = response.Dessert_Waste_kg
                 )
             )
 
             productData.add(
                 ProductData(
                     category = ProductCategory.Beverage,
-                    quantity = response.predictions.Beverage_Waste_kg
+                    quantity = response.Beverage_Waste_kg
                 )
             )
 
             productData.add(
                 ProductData(
                     category = ProductCategory.Appetizer,
-                    quantity = response.predictions.Appetizer_Waste_kg
+                    quantity = response.Appetizer_Waste_kg
                 )
             )
 
             productData.add(
                 ProductData(
                     category = ProductCategory.MainCourse,
-                    quantity = response.predictions.Main_Course_Waste_kg
+                    quantity = response.Main_Course_Waste_kg
                 )
             )
 
-            state = state.copy(
-                queryState = ForkCastState.Success,
-            )
+            state = state.copy(queryState = ForkCastState.Success)
 
         } catch (e: Exception) {
-            state = state.copy(
-                queryState = ForkCastState.ServerError,
-            )
-
+            state = state.copy(queryState = ForkCastState.ServerError)
             showSnackBar(e.message.orEmpty() + e.localizedMessage.orEmpty())
-
         }
 
     }

@@ -1,4 +1,4 @@
-package com.dinoy.forkcast.screens.details.network
+package com.dinoy.forkcast.network
 
 import com.dinoy.forkcast.screens.details.data.model.ProductDetailsData
 import com.dinoy.forkcast.screens.listing.data.models.ListingProductData
@@ -17,9 +17,13 @@ data class PredictDetailsRequest(
 )
 
 
-interface DetailsApiService {
+interface ApiService {
+
     @POST("predict-week")
-    suspend fun getProductData(@Body request: PredictDetailsRequest): List<ProductDetailsData>
+    suspend fun getProductDetails(@Body request: PredictDetailsRequest): List<ProductDetailsData>
+
+    @POST("predict")
+    suspend fun getProductListingDetails(@Body request: PredictRequest): ListingProductData
 }
 
 
@@ -27,7 +31,7 @@ object DinoRetroFit {
 
     const val BASE_URL = "https://o207ltrv.leopard-boa.ts.net/"
 
-    fun create(): DetailsApiService {
+    fun create(): ApiService {
         val client = OkHttpClient.Builder().build()
 
         return Retrofit.Builder()
@@ -35,6 +39,6 @@ object DinoRetroFit {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(DetailsApiService::class.java)
+            .create(ApiService::class.java)
     }
 }
