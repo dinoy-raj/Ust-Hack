@@ -10,5 +10,6 @@ data class DetailsState(
     val selectedCategory: ProductCategory = ProductCategory.Soup,
     val average: Double = 0.0,
     val notFetched: Boolean = true,
-    val productDetails: ProductDetails? = null
+    val productDetails: ProductDetails? = null,
+    val selectedIndex: Int = 0
 )

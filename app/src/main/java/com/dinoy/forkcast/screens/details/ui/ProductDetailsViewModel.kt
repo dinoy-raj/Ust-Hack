@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dinoy.forkcast.models.ForkCastState
@@ -29,6 +30,7 @@ class ProductDetailsViewModel @Inject constructor(private val detailsRepository:
     ViewModel() {
 
     var state by mutableStateOf(DetailsState())
+    var features = mutableStateListOf<Features>()
 
     fun setInitialArguments(date: String, category: ProductCategory) = viewModelScope.launch {
         state = state.copy(
@@ -47,8 +49,20 @@ class ProductDetailsViewModel @Inject constructor(private val detailsRepository:
         fetchDetailsQuery()
     }
 
+    fun setSelectedIndex(index: Int) {
+        features.clear()
+        state.productDetails?.weeklyData?.get(index)?.features?.let {
+            features.addAll(it)
+
+        }
+        state =
+            state.copy(selectedIndex = index)
+    }
+
     fun fetchDetailsQuery() = viewModelScope.launch {
-        state = state.copy(queryState = ForkCastState.Loading, productDetails = null)
+        state =
+            state.copy(queryState = ForkCastState.Loading, productDetails = null, selectedIndex = 0)
+        features.clear()
         detailsRepository.getProductDetails(
             PredictDetailsRequest(
                 date = state.selectedDate.toString(),
@@ -108,6 +122,13 @@ class ProductDetailsViewModel @Inject constructor(private val detailsRepository:
                             }
                         )
 
+                        features.clear()
+                        productDetails.weeklyData[state.selectedIndex].features.let {
+                            features.addAll(
+                                it
+                            )
+                        }
+
                         state = state.copy(
                             productDetails = productDetails,
                             average = response.data.weeklyPredictions.sumOf { it.predictions } / 7,
@@ -123,6 +144,7 @@ class ProductDetailsViewModel @Inject constructor(private val detailsRepository:
         state = state.copy(
             selectedDate = toLocalDate
         )
+        features.clear()
         fetchDetailsQuery()
     }
 

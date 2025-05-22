@@ -16,10 +16,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.ui.theme.interFontFamily
 
 @Composable
-fun AverageCountSection(average: Double = 0.0) {
+fun AverageCountSection(average: Double = 0.0, selectedCategory: ProductCategory) {
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -35,7 +36,7 @@ fun AverageCountSection(average: Double = 0.0) {
         {
             Text(
                 buildAnnotatedString {
-                    append("$average")
+                    append("${String.format("%.2f", average)}")
                     withStyle(
                         style = TextStyle(
                             fontFamily = interFontFamily,
@@ -67,7 +68,7 @@ fun AverageCountSection(average: Double = 0.0) {
             )
         }
         Text(
-            text = "These are Calculated Based on 100kg of product produced on daily basis.",
+            text = "These are Calculated Based on ${selectedCategory.getActualWeight()}kg of product produced on daily basis.",
             fontFamily = interFontFamily,
             fontSize = 12.sp,
             color = Color.DarkGray.copy(.7f),

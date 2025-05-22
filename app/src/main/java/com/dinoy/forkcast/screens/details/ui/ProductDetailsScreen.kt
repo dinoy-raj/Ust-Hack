@@ -6,16 +6,23 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,19 +39,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dinoy.forkcast.R
+import com.dinoy.forkcast.components.CustomisationTile
+import com.dinoy.forkcast.components.TileSection
+import com.dinoy.forkcast.components.TileSeparator
 import com.dinoy.forkcast.screens.details.components.AverageCountSection
 import com.dinoy.forkcast.screens.details.components.GraphSection
 import com.dinoy.forkcast.screens.details.components.HeaderRow
+import com.dinoy.forkcast.screens.details.data.model.Features
 import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.ui.theme.interFontFamily
 import dev.chrisbanes.haze.HazeState
@@ -54,6 +70,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 
 @OptIn(
@@ -183,7 +200,8 @@ fun ProductDetailsScreen(
 
                 item {
                     AverageCountSection(
-                        average = state.average
+                        average = state.average,
+                        state.selectedCategory
                     )
                 }
 
@@ -192,11 +210,163 @@ fun ProductDetailsScreen(
                 }
 
                 item {
-                    GraphSection()
+                    GraphSection(viewModel)
                 }
 
                 item {
                     Spacer(Modifier.height(24.dp))
+                }
+
+                item {
+                    Row(
+                        Modifier
+                            .padding(horizontal = 24.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Predicted Waste",
+                            fontFamily = interFontFamily,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.DarkGray,
+                            fontSize = 18.sp
+                        )
+
+                        Box(
+                            modifier = Modifier.background(
+                                color = Color.LightGray.copy(alpha = .2f),
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                        )
+                        {
+                            Text(
+                                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                                text = state.productDetails?.weeklyData[state.selectedIndex]?.date?.format(
+                                    DateTimeFormatter.ofPattern("dd MMM")
+                                ) ?: "",
+                                fontFamily = interFontFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.Black,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+
+                }
+
+                item {
+                    Spacer(Modifier.height(16.dp))
+                }
+
+                item {
+                    Box()
+                    {
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = 24.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        color = Color.LightGray.copy(alpha = .2f),
+                                        shape = RoundedCornerShape(16.dp)
+                                    )
+                                    .weight(2f),
+                                contentAlignment = Alignment.Center
+                            )
+                            {
+
+                            }
+                            Box(Modifier.width(16.dp))
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        color = Color.LightGray.copy(alpha = .2f),
+                                        shape = RoundedCornerShape(16.dp)
+                                    )
+                                    .weight(1f),
+                                contentAlignment = Alignment.Center
+                            )
+                            {
+
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    Spacer(Modifier.height(16.dp))
+                }
+
+                item {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        text = "Conditions Influenced",
+                        fontFamily = interFontFamily,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.DarkGray,
+                        fontSize = 18.sp
+                    )
+                }
+
+                item {
+                    Spacer(Modifier.height(24.dp))
+                }
+
+                item {
+                    TileSection {
+                        Column {
+                            viewModel.features.filter {
+                                it != Features.None
+                            }.forEach {
+                                Column {
+                                    CustomisationTile(
+                                        iconContent = {
+                                            Icon(
+                                                imageVector = it.getIcon(),
+                                                contentDescription = "list",
+                                                tint = Color.DarkGray,
+                                                modifier = Modifier
+                                                    .size(16.dp),
+                                            )
+                                        },
+                                        title = stringResource(it.getNameResourceId()),
+                                        trailingContent = {
+                                            Box(
+                                                modifier = Modifier
+                                                    .background(color = Color.Black, shape = RoundedCornerShape(16.dp))
+                                            )
+                                            {
+                                                Text(
+                                                    modifier = Modifier.padding(
+                                                        vertical = 4.dp,
+                                                        horizontal = 8.dp
+                                                    ),
+                                                    text = when (it) {
+                                                        is Features.Holiday -> "${it.percentage}%"
+                                                        is Features.Humidity -> "${it.percentage}%"
+                                                        Features.None -> "${0}%"
+                                                        is Features.Rainy -> "${it.percentage}%"
+                                                        is Features.Sunny -> "${it.percentage}%"
+                                                        is Features.Temperature -> "${it.percentage}%"
+                                                        is Features.WeekDay -> "${it.percentage}%"
+                                                        is Features.Weekend -> "${it.percentage}%"
+                                                    },
+                                                    fontFamily = interFontFamily,
+                                                    fontWeight = FontWeight.SemiBold,
+                                                    color = Color.White,
+                                                    fontSize = 15.sp
+                                                )
+                                            }
+                                        }
+                                    ) { }
+                                    TileSeparator()
+                                }
+                            }
+                        }
+                    }
                 }
 
 

@@ -106,7 +106,7 @@ sealed class Features : FeatureMetaData {
 
     data object None: Features() {
         override fun getNameResourceId(): Int {
-            return 0
+            return R.string.weekday
         }
 
         override fun getIcon(): ImageVector {

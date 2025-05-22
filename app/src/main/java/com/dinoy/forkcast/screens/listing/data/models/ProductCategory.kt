@@ -6,6 +6,7 @@ interface MetaData {
     fun getImageResourceId(): Int
     fun getNameResourceId(): Int
     fun getSoorajId(): String
+    fun getActualWeight(): Double
 }
 
 enum class ProductCategory : MetaData {
@@ -21,6 +22,10 @@ enum class ProductCategory : MetaData {
         override fun getSoorajId(): String {
             return "Dessert_Waste_kg"
         }
+
+        override fun getActualWeight(): Double {
+            return 40.0
+        }
     },
     Soup {
         override fun getImageResourceId(): Int {
@@ -33,6 +38,10 @@ enum class ProductCategory : MetaData {
 
         override fun getSoorajId(): String {
             return "Soup_Waste_kg"
+        }
+
+        override fun getActualWeight(): Double {
+            return 40.0
         }
     },
     MainCourse {
@@ -47,6 +56,10 @@ enum class ProductCategory : MetaData {
         override fun getSoorajId(): String {
             return "Main_Course_Waste_kg"
         }
+
+        override fun getActualWeight(): Double {
+            return 65.0
+        }
     },
     Appetizer {
         override fun getImageResourceId(): Int {
@@ -59,6 +72,10 @@ enum class ProductCategory : MetaData {
 
         override fun getSoorajId(): String {
             return "Appetizer_Waste_kg"
+        }
+
+        override fun getActualWeight(): Double {
+            return 30.0
         }
     },
     Salad {
@@ -73,6 +90,10 @@ enum class ProductCategory : MetaData {
         override fun getSoorajId(): String {
             return "Salad_Waste_kg"
         }
+
+        override fun getActualWeight(): Double {
+            return 30.0
+        }
     },
     Beverage {
         override fun getImageResourceId(): Int {
@@ -85,6 +106,10 @@ enum class ProductCategory : MetaData {
 
         override fun getSoorajId(): String {
             return "Beverage_Waste_kg"
+        }
+
+        override fun getActualWeight(): Double {
+            return 30.0
         }
     }
 }
