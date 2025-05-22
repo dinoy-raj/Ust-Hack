@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -97,6 +98,10 @@ fun ProductListingScreen(
                             .fillMaxWidth()
                             .background(
                                 color = Color.LightGray.copy(alpha = .3f),
+                                shape = RoundedCornerShape(24.dp)
+                            ).border(
+                                width = 1.dp,
+                                color = Color.LightGray.copy(alpha = .6f),
                                 shape = RoundedCornerShape(24.dp)
                             ),
                         contentAlignment = Alignment.Center
