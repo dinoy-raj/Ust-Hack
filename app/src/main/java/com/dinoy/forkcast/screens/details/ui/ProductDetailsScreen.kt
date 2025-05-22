@@ -41,9 +41,7 @@ import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.ui.theme.interFontFamily
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.hazeChild
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
-import dev.chrisbanes.haze.materials.HazeMaterials
 import java.time.LocalDate
 
 

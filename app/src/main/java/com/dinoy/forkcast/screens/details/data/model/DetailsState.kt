@@ -8,5 +8,5 @@ data class DetailsState(
     val queryState: ForkCastState = ForkCastState.Loading,
     val selectedDate: LocalDate = LocalDate.now(),
     val selectedCategory: ProductCategory = ProductCategory.Soup,
-    val average: Double
+    val average: Double = 0.0
 )
