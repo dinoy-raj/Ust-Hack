@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.dinoy.forkcast.ui.theme.interFontFamily
 
 @Composable
-fun AverageCountSection() {
+fun AverageCountSection(average: Double = 0.0) {
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -35,7 +35,7 @@ fun AverageCountSection() {
         {
             Text(
                 buildAnnotatedString {
-                    append("75")
+                    append("$average")
                     withStyle(
                         style = TextStyle(
                             fontFamily = interFontFamily,
@@ -67,7 +67,7 @@ fun AverageCountSection() {
             )
         }
         Text(
-            text = "These are Calculated Based on 50kg of product produced on daily basis.",
+            text = "These are Calculated Based on 100kg of product produced on daily basis.",
             fontFamily = interFontFamily,
             fontSize = 12.sp,
             color = Color.DarkGray.copy(.7f),

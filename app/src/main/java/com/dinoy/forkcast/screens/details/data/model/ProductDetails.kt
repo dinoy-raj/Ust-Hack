@@ -103,4 +103,14 @@ sealed class Features : FeatureMetaData {
             return Icons.Outlined.BusinessCenter
         }
     }
+
+    data object None: Features() {
+        override fun getNameResourceId(): Int {
+            return 0
+        }
+
+        override fun getIcon(): ImageVector {
+            return Icons.Outlined.BusinessCenter
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.dinoy.forkcast.network
 
-import com.dinoy.forkcast.screens.details.data.model.ProductDetailsData
 import com.dinoy.forkcast.screens.listing.data.models.ListingProductData
 import com.dinoy.forkcast.screens.listing.data.models.PredictRequest
 import okhttp3.OkHttpClient
@@ -16,11 +15,10 @@ data class PredictDetailsRequest(
     val filter: String
 )
 
-
 interface ApiService {
 
     @POST("predict-week")
-    suspend fun getProductDetails(@Body request: PredictDetailsRequest): List<ProductDetailsData>
+    suspend fun getProductDetails(@Body request: PredictDetailsRequest): WeeklyPredictionResponse
 
     @POST("predict")
     suspend fun getProductListingDetails(@Body request: PredictRequest): ListingProductData

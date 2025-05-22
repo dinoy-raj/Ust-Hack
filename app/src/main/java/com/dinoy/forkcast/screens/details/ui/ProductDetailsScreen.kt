@@ -16,15 +16,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,7 +42,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dinoy.forkcast.R
-import com.dinoy.forkcast.models.ForkCastState
 import com.dinoy.forkcast.screens.details.components.AverageCountSection
 import com.dinoy.forkcast.screens.details.components.GraphSection
 import com.dinoy.forkcast.screens.details.components.HeaderRow
@@ -44,7 +50,10 @@ import com.dinoy.forkcast.ui.theme.interFontFamily
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
-import java.time.LocalDate
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 
 @OptIn(
@@ -69,6 +78,14 @@ fun ProductDetailsScreen(
             viewModel.setInitialArguments(date, category)
         }
     }
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = LocalDateTime.of(
+            viewModel.state.selectedDate,
+            LocalTime.NOON
+        ).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    )
 
     with(sharedTransitionScope) {
 
@@ -150,12 +167,13 @@ fun ProductDetailsScreen(
 
                 item {
                     HeaderRow(
-                        currentDate = LocalDate.now(),
-                        onClickNext = {},
-                        onClickPrevious = {},
-                        onCalenderClick = {
+                        onClickNext = {
 
-                        }
+                        },
+                        onClickPrevious = {
+
+                        },
+                        onCalenderClick = { showDatePicker = true }
                     )
                 }
 
@@ -164,7 +182,9 @@ fun ProductDetailsScreen(
                 }
 
                 item {
-                    AverageCountSection()
+                    AverageCountSection(
+                        average = state.average
+                    )
                 }
 
                 item {
@@ -183,6 +203,37 @@ fun ProductDetailsScreen(
                 item {
                     Spacer(Modifier.height(800.dp))
                 }
+            }
+        }
+
+
+
+        if (showDatePicker) {
+            DatePickerDialog(
+                onDismissRequest = {
+                    showDatePicker = false
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.setSelectedDate(
+                                Instant.ofEpochMilli(
+                                    datePickerState.selectedDateMillis ?: 0,
+                                ).atZone(ZoneId.systemDefault()).toLocalDate()
+                            )
+                            showDatePicker = false
+                        },
+                    ) {
+                        androidx.compose.material.Text(stringResource(R.string.ok))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDatePicker = false }) {
+                        androidx.compose.material.Text(stringResource(R.string.cancel))
+                    }
+                },
+            ) {
+                DatePicker(state = datePickerState)
             }
         }
     }

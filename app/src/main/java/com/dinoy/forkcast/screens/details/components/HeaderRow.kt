@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,7 +28,6 @@ import java.time.LocalDate
 
 @Composable
 fun HeaderRow(
-    currentDate: LocalDate,
     onClickNext: () -> Unit,
     onClickPrevious: () -> Unit,
     onCalenderClick: () -> Unit
@@ -44,7 +41,7 @@ fun HeaderRow(
     )
     {
         Text(
-            text = "This Week",
+            text = "Weekly Report",
             fontFamily = interFontFamily,
             fontWeight = FontWeight.Medium,
             color = Color.DarkGray,
@@ -56,21 +53,21 @@ fun HeaderRow(
                 icon = painterResource(R.drawable.left)
             )
             {
-
+                onClickNext()
             }
             Spacer(Modifier.width(16.dp))
             BoxButton(
                 icon = painterResource(R.drawable.right)
             )
             {
-
+                onClickPrevious()
             }
             Spacer(Modifier.width(24.dp))
             BoxButton(
                 icon = painterResource(R.drawable.calendar)
             )
             {
-
+                onCalenderClick()
             }
         }
     }

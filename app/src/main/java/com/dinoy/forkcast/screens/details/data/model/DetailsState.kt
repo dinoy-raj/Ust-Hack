@@ -9,5 +9,6 @@ data class DetailsState(
     val selectedDate: LocalDate = LocalDate.now(),
     val selectedCategory: ProductCategory = ProductCategory.Soup,
     val average: Double = 0.0,
-    val notFetched: Boolean = true
+    val notFetched: Boolean = true,
+    val productDetails: ProductDetails? = null
 )
