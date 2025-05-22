@@ -17,3 +17,14 @@ fun getComparisonValue(productCategory: ProductCategory): Double = when(productC
     ProductCategory.MainCourse -> 80.0
     else -> 40.0
 }
+
+fun Double.toPercentageStringFormatted(decimalPlaces: Int = 0, includeSymbol: Boolean = true): String {
+    val percentageValue = this * 100
+    val formatString = "%.${decimalPlaces}f" // Creates format like "%.0f", "%.2f"
+    val formattedValue = String.format(formatString, percentageValue)
+    return if (includeSymbol) {
+        "$formattedValue%"
+    } else {
+        formattedValue
+    }
+}

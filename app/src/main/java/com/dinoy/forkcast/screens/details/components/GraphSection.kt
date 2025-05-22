@@ -61,44 +61,6 @@ fun GraphContentSection(modifier: Modifier = Modifier, viewModel: ProductDetails
 
     Box(modifier = modifier)
     {
-        Box(modifier = Modifier.fillMaxSize())
-        {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-
-                Box(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .drawWithCache {
-                            onDrawBehind {
-                                val pathEffect = PathEffect.dashPathEffect(
-                                    floatArrayOf(
-                                        10f,
-                                        10f
-                                    ), 0f
-                                )
-                                drawLine(
-                                    color = Color.DarkGray.copy(alpha = .2f),
-                                    start = Offset(
-                                        0f, 0f
-                                    ),
-                                    end = Offset(
-                                        size.width,
-                                        0f
-                                    ),
-                                    strokeWidth = size.height,
-                                    pathEffect = pathEffect
-                                )
-                            }
-                        })
-                Spacer(modifier = Modifier.fillMaxHeight((state.average / getComparisonValue(state.selectedCategory)).toFloat()))
-            }
-        }
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.Bottom,
@@ -130,7 +92,7 @@ fun GraphContentScale(viewModel: ProductDetailsViewModel) {
 
     Box(
         modifier = Modifier
-            .padding(bottom = 16.dp)
+            .padding(bottom = 24.dp)
             .fillMaxHeight()
     )
     {

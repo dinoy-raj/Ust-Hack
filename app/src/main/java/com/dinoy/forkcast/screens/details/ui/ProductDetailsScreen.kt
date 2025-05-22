@@ -49,7 +49,10 @@ import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -63,6 +66,7 @@ import com.dinoy.forkcast.screens.details.components.HeaderRow
 import com.dinoy.forkcast.screens.details.data.model.Features
 import com.dinoy.forkcast.screens.listing.data.models.ProductCategory
 import com.dinoy.forkcast.ui.theme.interFontFamily
+import com.dinoy.forkcast.utils.toPercentageStringFormatted
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -214,7 +218,7 @@ fun ProductDetailsScreen(
                 }
 
                 item {
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(32.dp))
                 }
 
                 item {
@@ -241,7 +245,7 @@ fun ProductDetailsScreen(
                         )
                         {
                             Text(
-                                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                                modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp),
                                 text = state.productDetails?.weeklyData[state.selectedIndex]?.date?.format(
                                     DateTimeFormatter.ofPattern("dd MMM")
                                 ) ?: "",
@@ -277,7 +281,33 @@ fun ProductDetailsScreen(
                                 contentAlignment = Alignment.Center
                             )
                             {
-
+                                Text(
+                                    buildAnnotatedString {
+                                        append(
+                                            "${
+                                                String.format(
+                                                    "%.2f",
+                                                    state.productDetails?.weeklyData[state.selectedIndex]?.quantity
+                                                )
+                                            }"
+                                        )
+                                        withStyle(
+                                            style = TextStyle(
+                                                fontFamily = interFontFamily,
+                                                fontSize = 18.sp,
+                                                color = Color.DarkGray,
+                                                fontWeight = FontWeight.SemiBold
+                                            ).toSpanStyle()
+                                        ) {
+                                            append(" KG")
+                                        }
+                                    },
+                                    fontFamily = interFontFamily,
+                                    fontSize = 40.sp,
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(vertical = 16.dp)
+                                )
                             }
                             Box(Modifier.width(16.dp))
                             Box(
@@ -290,6 +320,34 @@ fun ProductDetailsScreen(
                                 contentAlignment = Alignment.Center
                             )
                             {
+                                Column(
+                                    modifier = Modifier,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+
+                                    Text(
+                                        text = state.productDetails?.weeklyData[state.selectedIndex]?.accuracy?.toPercentageStringFormatted()
+                                            .orEmpty(),
+                                        fontFamily = interFontFamily,
+                                        fontSize = 24.sp,
+                                        color = Color.Black,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(top = 16.dp)
+                                    )
+
+                                    Text(
+                                        modifier = Modifier.padding(
+                                            vertical = 8.dp,
+                                            horizontal = 16.dp
+                                        ),
+                                        text = stringResource(R.string.confidence),
+                                        fontFamily = interFontFamily,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Color.LightGray,
+                                        fontSize = 10.sp
+                                    )
+                                }
+
 
                             }
                         }
@@ -297,7 +355,7 @@ fun ProductDetailsScreen(
                 }
 
                 item {
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(32.dp))
                 }
 
                 item {
@@ -336,13 +394,16 @@ fun ProductDetailsScreen(
                                         trailingContent = {
                                             Box(
                                                 modifier = Modifier
-                                                    .background(color = Color.Black, shape = RoundedCornerShape(16.dp))
+                                                    .background(
+                                                        color = Color.Black,
+                                                        shape = RoundedCornerShape(16.dp)
+                                                    )
                                             )
                                             {
                                                 Text(
                                                     modifier = Modifier.padding(
                                                         vertical = 4.dp,
-                                                        horizontal = 8.dp
+                                                        horizontal = 16.dp
                                                     ),
                                                     text = when (it) {
                                                         is Features.Holiday -> "${it.percentage}%"
@@ -371,7 +432,7 @@ fun ProductDetailsScreen(
 
 
                 item {
-                    Spacer(Modifier.height(800.dp))
+                    Spacer(Modifier.height(100.dp))
                 }
             }
         }
