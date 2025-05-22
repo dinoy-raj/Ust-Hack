@@ -72,7 +72,7 @@ fun ProductDetailsScreen(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    modifier = Modifier.hazeChild(hazeState, HazeMaterials.regular()),
+                    modifier = Modifier,
                     title = {
                         Text(
                             modifier = Modifier.padding(start = 24.dp),

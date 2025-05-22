@@ -5,8 +5,8 @@ import com.dinoy.forkcast.R
 interface MetaData {
     fun getImageResourceId(): Int
     fun getNameResourceId(): Int
+    fun getSoorajId(): String
 }
-
 
 enum class ProductCategory : MetaData {
     Dessert {
@@ -17,6 +17,10 @@ enum class ProductCategory : MetaData {
         override fun getNameResourceId(): Int {
             return R.string.dessert
         }
+
+        override fun getSoorajId(): String {
+            return "Dessert_Waste_kg"
+        }
     },
     Soup {
         override fun getImageResourceId(): Int {
@@ -25,6 +29,10 @@ enum class ProductCategory : MetaData {
 
         override fun getNameResourceId(): Int {
             return R.string.soup
+        }
+
+        override fun getSoorajId(): String {
+            return "Soup_Waste_kg"
         }
     },
     MainCourse {
@@ -35,6 +43,10 @@ enum class ProductCategory : MetaData {
         override fun getNameResourceId(): Int {
             return R.string.main_course
         }
+
+        override fun getSoorajId(): String {
+            return "Main_Course_Waste_kg"
+        }
     },
     Appetizer {
         override fun getImageResourceId(): Int {
@@ -43,6 +55,10 @@ enum class ProductCategory : MetaData {
 
         override fun getNameResourceId(): Int {
             return R.string.appetizer
+        }
+
+        override fun getSoorajId(): String {
+            return "Appetizer_Waste_kg"
         }
     },
     Salad {
@@ -53,6 +69,10 @@ enum class ProductCategory : MetaData {
         override fun getNameResourceId(): Int {
             return R.string.salad
         }
+
+        override fun getSoorajId(): String {
+            return "Salad_Waste_kg"
+        }
     },
     Beverage {
         override fun getImageResourceId(): Int {
@@ -61,6 +81,10 @@ enum class ProductCategory : MetaData {
 
         override fun getNameResourceId(): Int {
             return R.string.beverage
+        }
+
+        override fun getSoorajId(): String {
+            return "Beverage_Waste_kg"
         }
     }
 }
